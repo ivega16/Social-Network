@@ -3,16 +3,17 @@ const Thought = require('../models/Thought')
 
 module.exports = {
   async getUsers(req, res) {
-    try {
-      const users = await User.find();
+    // try {
+      const users = await User.find().populate("thoughts").populate("friends");
       res.json(users);
-    } catch (err) {
-      res.status(500).json(err);
-    }
+    // } catch (err) {
+    //   res.status(500).json(err);
+    // }
   },
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
+      .populate("thoughts").populate("friends")
         .select('-__v');
 
       if (!user) {
@@ -55,9 +56,9 @@ module.exports = {
     try {
       const thought = await Thought.findOneAndRemove({ username: req.body.username });
 
-      if (!thought) {
-        return res.status(404).json({ message: 'No thought with this id!' });
-      }
+      // if (!thought) {
+      //   return res.status(404).json({ message: 'No thought with this id!' });
+      // }
 
       const user = await User.findOneAndRemove(
         { _id: req.params.userId },
@@ -67,10 +68,10 @@ module.exports = {
       if (!user) {
         return res
           .status(404)
-          .json({ message: 'Thought created but no user with this id!' });
+          .json({ message: 'User created but no user with this id!' });
       }
 
-      res.json({ message: 'Thought successfully deleted!' });
+      res.json({ message: 'User successfully deleted!' });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -79,9 +80,10 @@ module.exports = {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: params.friendId } },
+        { $addToSet: { friends: req.params.friendId } },
         { new: true }
-      );
+      )
+      .populate("thoughts").populate("friends");
 
       if (!user) {
         return res.status(404).json({
