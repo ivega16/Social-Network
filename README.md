@@ -1,4 +1,4 @@
-# SVG-logo-maker
+# Social-Network
 
 ## Description
 
