@@ -36,6 +36,8 @@ Insomnia
 
 ## How to Contribute
 
+I had assistance from Instructor Phil Loy's walkthrough video and help from the TA's Daniel Wilkinson and Quentin Jones.
+
 Isabella Vega
 
 ## Tests
